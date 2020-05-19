@@ -26,22 +26,28 @@
 	</style>
 	<body>
 		<script type="text/javascript">
-	var currentid=0;
-	var currentlength=0;
+	var currentid=0;      // assign global numerical value to track the current meal
+	var currentlength=0;  // assign global numerical value for number of meals
+	
+	/**
+	*Initialize and invoke a fetcher function to gather and 
+	*display the meals based on the category 
+	*/
+
 	function fetcher(query){
 			var ids=[];
 			$('#myModalLabel').text(query);
 			$.get("https://www.themealdb.com/api/json/v1/1/filter.php?c="+query+"",(data) => {
-				$.each(data,(index,el)=>{
+				$.each(data,(index,el)=>{ //for loop that runs for numer of meals
 					$.each(el,(i,d)=>{
 
-						ids.push(d.idMeal);
+						ids.push(d.idMeal);  //array holds the numerical value for meal id
 					})
-					$('.modal-body').empty();
+					$('.modal-body').empty(); //To empty the modal content for each query
 					var counter=0;
 					currentlength=ids.length;
 					currentid=0;
-					$.each(ids,(index,element) => {
+					$.each(ids,(index,element) => { //for loop runs for each meal that belongs to the id from array ids.
 
 						$.get("https://www.themealdb.com/api/json/v1/1/lookup.php?i="+element+"",(data) => {
 							
@@ -72,10 +78,8 @@
 
 		$.get("https://www.themealdb.com/api/json/v1/1/categories.php",(data)=>{
 
-			//console.log(data);
-			$.each(data,(index,element) => {
+			$.each(data,(index,element) => { //for loop runs for all categories of meal
 				$.each(element,(i,d)=>{
-					// style=\"width: 18rem;margin: 10px;\">
 					var root='<div class=\"card float-left\" style=\"width: 18rem;margin: 10px;\">';
 					var root1='<div class=\"card\"><div class=\"card_image\">';
 					var img1='<img src=\"'+d.strCategoryThumb+'\"></div>';
@@ -90,21 +94,34 @@
 		});
 
 	});
+
+
+/**
+	*Initialize and invoke a controller function to display the 
+	*appropriate meal based on the input from button selection
+*/
+
  function controller(bt){
- 	$('#mid'+currentid).css("display","none");
+ 	$('#mid'+currentid).css("display","none");  //hide the current meal
  	if(bt=='prev'){
  		currentid=(currentid-1);
  		if(currentid<0){
  			currentid=currentlength-1;
  		}
- 		$('#mid'+currentid).css("display","block");
+ 		$('#mid'+currentid).css("display","block"); //display the previous meal
  	}
  	else
  	{
  		currentid=(currentid+1)%currentlength;
- 		$('#mid'+currentid).css("display","block");
+ 		$('#mid'+currentid).css("display","block"); //display the next meal
  	}
  }
+
+ /**
+ * Initialize and invoke a erase function to hide the 
+ * display of meals after the close button. 
+ */
+
  function erase(){
  	$('#mid'+currentid).css("display","none");
 
@@ -121,7 +138,7 @@
 				    
 				    <div class="modal-content">
 				      <div class="modal-header">
-				        <!-- <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button> -->
+				       
 				        <h4 class="modal-title" id="myModalLabel"></h4>
 				      
 				      </div>
